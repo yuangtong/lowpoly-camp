@@ -42,3 +42,43 @@ export function createLabel(text, { bubble = false, height = 0.42 } = {}) {
   sprite.scale.set((height * cv.width) / cv.height, height, 1);
   return sprite;
 }
+
+/**
+ * Voz de un personaje: prepara un globo por cada frase posible y muestra uno
+ * a la vez durante unos segundos. Las texturas se crean aquí, una sola vez.
+ * @param {THREE.Scene} scene
+ * @param {string[]} texts Todas las frases que puede decir.
+ * @param {number} [height] Alto del globo en unidades del mundo.
+ * @returns {{ say: (text: string, seconds?: number) => void, update: (dt: number, x: number, y: number, z: number) => void }}
+ *   `update` coloca el globo activo en (x, y, z) y lo oculta al acabar su tiempo.
+ */
+export function createSpeaker(scene, texts, height = 0.5) {
+  const bubbles = new Map();
+  for (const text of new Set(texts)) {
+    const sprite = createLabel(text, { bubble: true, height });
+    sprite.visible = false;
+    scene.add(sprite);
+    bubbles.set(text, sprite);
+  }
+  let current = null;
+  let left = 0;
+
+  return {
+    say(text, seconds = 4.5) {
+      if (current) current.visible = false;
+      current = bubbles.get(text) ?? null;
+      if (!current) return;
+      current.visible = true;
+      left = seconds;
+    },
+    update(dt, x, y, z) {
+      if (!current) return;
+      current.position.set(x, y, z);
+      left -= dt;
+      if (left <= 0) {
+        current.visible = false;
+        current = null;
+      }
+    },
+  };
+}

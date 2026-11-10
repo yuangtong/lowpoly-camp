@@ -9,9 +9,21 @@ const colliders = [];
  * @param {number} x
  * @param {number} z
  * @param {number} r Radio.
+ * @returns {{ x: number, z: number, r: number }} El obstáculo (para poder quitarlo luego).
  */
 export function addCollider(x, z, r) {
-  colliders.push({ x, z, r });
+  const collider = { x, z, r };
+  colliders.push(collider);
+  return collider;
+}
+
+/**
+ * Quita un obstáculo registrado (por ejemplo, una gata que empieza a seguirte).
+ * @param {{ x: number, z: number, r: number }} collider El objeto que devolvió `addCollider`.
+ */
+export function removeCollider(collider) {
+  const i = colliders.indexOf(collider);
+  if (i !== -1) colliders.splice(i, 1);
 }
 
 /**

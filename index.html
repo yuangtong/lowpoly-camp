@@ -16,7 +16,7 @@
       .touch-only { display: none; }
 
       /* Objetivo, mochila, avisos y celebración */
-      #objective, #backpack, #toast, #celebration {
+      #objective, #backpack, #toast, #celebration, #prompt {
         position: fixed; pointer-events: none; color: #dfe8ff;
         font: 600 14px/1.3 system-ui, -apple-system, Segoe UI, sans-serif;
         text-shadow: 0 1px 4px #000a;
@@ -32,6 +32,16 @@
       #backpack small { display: block; font-weight: 500; font-size: 11px; opacity: .7; letter-spacing: .08em; }
       #backpack .coin { color: #ffcf3f; }
       #backpack .wood { color: #d9935c; }
+      #extras { margin-top: 4px; font-size: 12px; font-weight: 500; max-width: 240px; }
+      #prompt {
+        left: 50%; bottom: 13%; transform: translateX(-50%); opacity: 0; transition: opacity .15s;
+        padding: 7px 14px; border-radius: 999px; background: #10234ae0; border: 1px solid #dfe8ff44; white-space: nowrap;
+      }
+      #prompt.show { opacity: 1; }
+      #prompt kbd {
+        display: inline-block; min-width: 20px; margin-right: 6px; padding: 1px 6px; border-radius: 6px; text-align: center;
+        background: #f08a3c; color: #10234a; font: 800 13px system-ui, sans-serif;
+      }
       #toast {
         left: 50%; bottom: 22%; transform: translateX(-50%); opacity: 0; transition: opacity .25s;
         padding: 6px 14px; border-radius: 999px; background: #10234acc;
@@ -82,6 +92,8 @@
         #jump-btn, #action-btn { display: block; }
         #hud { display: none; }
         #objective { font-size: 12px; max-width: 52vw; }
+        #prompt kbd { display: none; }
+        #prompt { bottom: 46%; }
         .touch-only { display: inline; }
         .desktop-only { display: none; }
       }
@@ -90,14 +102,15 @@
   <body>
     <div id="hud">
       <b>LOW POLY CAMP</b><br />
-      <span class="desktop-only">WASD o flechas para moverte · Shift correr · Espacio saltar · E golpear árboles · arrastra para mirar</span>
+      <span class="desktop-only">WASD o flechas para moverte · Shift correr · Espacio saltar · E interactuar · arrastra para mirar</span>
       <span class="touch-only">Joystick para moverte · arrastra para mirar</span>
     </div>
     <div id="joystick"><div id="joystick-knob"></div></div>
     <button id="jump-btn" type="button">SALTAR</button>
     <button id="action-btn" type="button">GOLPEAR</button>
     <div id="objective"></div>
-    <div id="backpack"><small>MOCHILA</small><span class="coin">● <span id="coins">0</span></span> &nbsp; <span class="wood">▮ <span id="wood">0</span></span></div>
+    <div id="backpack"><small>MOCHILA</small><span class="coin">● <span id="coins">0</span></span> &nbsp; <span class="wood">▮ <span id="wood">0</span></span><div id="extras" hidden></div></div>
+    <div id="prompt"><kbd>E</kbd><span id="prompt-text"></span></div>
     <div id="toast"></div>
     <div id="celebration"></div>
     <script type="module" src="/src/main.js"></script>

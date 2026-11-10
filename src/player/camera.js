@@ -18,7 +18,7 @@ export function createFollowCamera(camera, domElement, target) {
   controls.minDistance = CAMERA.minDistance;
   controls.maxDistance = CAMERA.maxDistance;
   controls.minPolarAngle = Math.PI * 0.18;
-  controls.maxPolarAngle = Math.PI * 0.5;
+  controls.maxPolarAngle = Math.PI * 0.56; // deja mirar un poco hacia arriba
 
   const focus = new THREE.Vector3();
   const delta = new THREE.Vector3();

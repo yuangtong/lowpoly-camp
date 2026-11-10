@@ -21,7 +21,7 @@ function walkable(x, z) {
  * @param {THREE.Scene} scene
  * @param {THREE.Mesh} terrain Malla del suelo, para apoyar los pies con un rayo.
  * @param {{ x: number, z: number }} [start] Posición inicial.
- * @returns {{ position: THREE.Vector3, punch: () => void, update: (dt: number, t: number, input: { x: number, y: number, run: boolean, jump: boolean }, camera: THREE.Camera) => void }}
+ * @returns {{ position: THREE.Vector3, velocity: THREE.Vector3, punch: () => void, update: (dt: number, t: number, input: { x: number, y: number, run: boolean, jump: boolean }, camera: THREE.Camera) => void }}
  */
 export function createPlayer(scene, terrain, start = PLAYER.start) {
   const { group, animate } = createCharacter();
@@ -117,5 +117,5 @@ export function createPlayer(scene, terrain, start = PLAYER.start) {
     punchTime = 1;
   }
 
-  return { position: pos, punch, update };
+  return { position: pos, velocity, punch, update };
 }
