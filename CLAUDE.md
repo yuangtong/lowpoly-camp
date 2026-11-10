@@ -8,8 +8,9 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 
 - Stack: Vite + Three.js (ES modules, JavaScript). Sin modelos externos por ahora: todo es procedural.
 - Archivos: `index.html` (canvas + HUD), `src/main.js` (setup + loop), `src/config.js`
-  (semilla, medidas y paleta), `src/utils/` (rng, noise, geometry) y `src/world/`
-  (terrain, water, mountains, trees, rocks, camp, sky). Cada módulo de `world`
+  (semilla, medidas, jugador, cámara y paleta), `src/utils/` (rng, noise, geometry),
+  `src/world/` (terrain, water, mountains, trees, rocks, camp, sky, colliders) y
+  `src/player/` (character, player, input, camera). Cada módulo de `world`
   exporta `create…(scene)`; los animados devuelven `{ update }`.
 - El RNG con semilla es compartido: el orden en que `main.js` construye los módulos
   define la escena. Añade lo nuevo al final de esa lista.
@@ -19,6 +20,12 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
   PointLight cálida en la fogata.
 - Paleta: cielo `#16306a`, verdes `#3f9a3a`–`#58b544`, roca `#3a4566`–`#56628a`,
   nieve `#e3ecfa`, acento naranja `#f08a3c`.
+- Jugador: personaje procedural de bloques, movimiento relativo a la cámara, cámara en
+  tercera persona (OrbitControls siguiendo al personaje). Entrada por teclado y por
+  joystick/botón táctiles definidos en `index.html` (visibles con `pointer: coarse`).
+- Colisiones: círculos en XZ registrados con `addCollider()` desde cada módulo del mundo;
+  el río y los límites del mapa se bloquean en `player.js`. Todo obstáculo nuevo debe
+  registrar su collider.
 - Deploy: Vercel (framework Vite, build `vite build`, salida `dist`). Repo en GitHub.
 
 ## Referencias (consúltalas antes de implementar algo nuevo)
@@ -31,6 +38,8 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
   El cliente se conecta con el SDK web `@colyseus/sdk` (verificado en npm en
   noviembre de 2026: es el paquete vigente; `colyseus.js` es el nombre anterior).
   Vuelve a comprobarlo en los docs antes de instalarlo.
+- Referencia de MMO en navegador (revisar su arquitectura antes del paso de multijugador):
+  https://github.com/tech-leads-club/nj-mmo
 - Física (futuro): Rapier https://rapier.rs/
 - Assets low-poly CC0: https://kenney.nl/assets, https://quaternius.com/, https://poly.pizza/
 - Modelos propios: Blender → exportar .glb y cargar con GLTFLoader.
@@ -39,8 +48,8 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 
 ## Roadmap
 
-1. Personaje controlable (WASD) + cámara en tercera persona.
-2. Colisiones con árboles y rocas, y límites del mapa.
+1. ~~Personaje controlable (WASD) + cámara en tercera persona.~~ Hecho (también táctil).
+2. ~~Colisiones con árboles y rocas, y límites del mapa.~~ Hecho (círculos simples).
 3. Mecánica arcade (recolectar objetos, puntaje, tiempo).
 4. Menú, sonido y pantalla de game over.
 5. Multijugador con Colyseus.

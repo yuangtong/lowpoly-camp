@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { COLORS } from '../config.js';
 import { flatMat, jitter, paintFaces, varied } from '../utils/geometry.js';
 import { rand } from '../utils/rng.js';
+import { addCollider } from './colliders.js';
 import { groundHeight } from './terrain.js';
 
 /** Rocas: [x, z, escala, hundimiento en el suelo (0–1)]. */
@@ -29,5 +30,6 @@ export function createRocks(scene) {
     m.castShadow = true;
     m.receiveShadow = true;
     scene.add(m);
+    addCollider(x, z, s * 1.1);
   }
 }

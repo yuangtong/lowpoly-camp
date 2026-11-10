@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { COLORS, WORLD } from '../config.js';
 import { flatMat, glowTexture, jitter, paintFaces, varied } from '../utils/geometry.js';
 import { rand } from '../utils/rng.js';
+import { addCollider } from './colliders.js';
 import { groundHeight } from './terrain.js';
 
 const FIRE_INTENSITY = 160;
@@ -35,6 +36,7 @@ function createTent(scene) {
   tent.rotation.y = 0.55;
   tent.castShadow = true;
   scene.add(tent);
+  addCollider(x, z, 2.1);
 }
 
 /**
@@ -46,6 +48,7 @@ function createFire(scene) {
   const fire = new THREE.Group();
   fire.position.set(x, groundHeight(x, z), z);
   scene.add(fire);
+  addCollider(x, z, 1.3);
 
   // Troncos cruzados
   for (let i = 0; i < 4; i++) {
@@ -160,6 +163,7 @@ function createSeats(scene) {
     m.rotation.y = rand() * 3;
     m.castShadow = true;
     scene.add(m);
+    addCollider(x, z, 0.6);
   });
 }
 

@@ -17,6 +17,33 @@ export const WORLD = {
   tent: { x: -15, z: 9.5 },
 };
 
+/** Jugador: movimiento, salto y límites del mapa. */
+export const PLAYER = {
+  /** Posición inicial (x, z) y hacia dónde mira (radianes; π = hacia las montañas). */
+  start: { x: -4, z: 13, facing: Math.PI },
+  walkSpeed: 5.5,
+  runSpeed: 9.5,
+  /** Rapidez con la que acelera/frena y gira (mayor = más brusco). */
+  acceleration: 12,
+  turnSpeed: 12,
+  jumpSpeed: 7.5,
+  gravity: 22,
+  /** Radio de colisión del personaje. */
+  radius: 0.45,
+  /** Límites caminables del mapa. */
+  bounds: { minX: -118, maxX: 118, minZ: -62, maxZ: 40 },
+};
+
+/** Cámara en tercera persona. */
+export const CAMERA = {
+  /** Altura del punto que mira la cámara sobre los pies del personaje. */
+  targetHeight: 1.7,
+  /** Posición inicial relativa al personaje. */
+  offset: { x: 0, y: 4.2, z: 10.5 },
+  minDistance: 5,
+  maxDistance: 28,
+};
+
 /** Paleta de la escena. */
 export const COLORS = {
   // Ambiente
@@ -57,6 +84,15 @@ export const COLORS = {
   spark: '#ffb347',
   seatTop: '#d9935c',
   seatSide: '#b5582b',
+
+  // Personaje
+  skin: '#f2c79a',
+  jacket: '#f08a3c',
+  pants: '#2a3d82',
+  boots: '#3b2a22',
+  beanie: '#c8443a',
+  backpack: '#3f9a3a',
+  eyes: '#1b2340',
 
   // Cielo
   cloudTop: '#f2f5fc',

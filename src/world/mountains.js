@@ -3,6 +3,7 @@ import { COLORS } from '../config.js';
 import { flatMat, paintFaces, varied } from '../utils/geometry.js';
 import { hash3 } from '../utils/noise.js';
 import { pick, rand } from '../utils/rng.js';
+import { addCollider } from './colliders.js';
 
 /** Montañas del fondo: [x, z, radio, altura, línea de nieve (0–1)]. */
 const MOUNTAINS = [
@@ -45,6 +46,7 @@ function mountain(scene, x, z, radius, height, snowLine) {
   m.castShadow = true;
   m.receiveShadow = true;
   scene.add(m);
+  addCollider(x, z, radius * 0.8);
 }
 
 /**

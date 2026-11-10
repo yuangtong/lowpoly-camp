@@ -3,6 +3,7 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { COLORS, WORLD } from '../config.js';
 import { flatMat, jitter, paintFaces, varied } from '../utils/geometry.js';
 import { pick, rand, range } from '../utils/rng.js';
+import { addCollider } from './colliders.js';
 import { groundHeight, riverZ } from './terrain.js';
 
 const PINE_VARIANTS = 8;
@@ -53,6 +54,7 @@ export function createTrees(scene) {
     m.castShadow = true;
     m.receiveShadow = true;
     scene.add(m);
+    addCollider(x, z, 0.45 * s); // solo el tronco
   };
 
   // Bosque disperso

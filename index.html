@@ -2,7 +2,7 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Low Poly Camp · Three.js</title>
     <style>
       html, body { margin: 0; height: 100%; background: #10234a; overflow: hidden; }
@@ -13,10 +13,43 @@
         opacity: .75; pointer-events: none; text-shadow: 0 1px 4px #0008;
       }
       #hud b { font-size: 15px; letter-spacing: .04em; }
+      .touch-only { display: none; }
+
+      /* Controles táctiles: solo en pantallas táctiles */
+      #joystick, #jump-btn {
+        display: none; position: fixed; border-radius: 50%;
+        background: #dfe8ff22; border: 2px solid #dfe8ff55;
+        touch-action: none; user-select: none; -webkit-user-select: none;
+      }
+      #joystick { left: 24px; bottom: 28px; width: 130px; height: 130px; }
+      #joystick-knob {
+        position: absolute; left: 50%; top: 50%; width: 56px; height: 56px;
+        margin: -28px 0 0 -28px; border-radius: 50%; background: #f08a3ccc;
+        pointer-events: none;
+      }
+      #jump-btn {
+        right: 28px; bottom: 44px; width: 84px; height: 84px; padding: 0;
+        color: #dfe8ff; font: 600 13px system-ui, sans-serif;
+      }
+      #jump-btn:active { background: #f08a3c88; }
+      @media (pointer: coarse) {
+        body { user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+        #joystick { display: block; }
+        #jump-btn { display: block; }
+        #hud { top: 14px; bottom: auto; left: 16px; }
+        .touch-only { display: inline; }
+        .desktop-only { display: none; }
+      }
     </style>
   </head>
   <body>
-    <div id="hud"><b>LOW POLY CAMP</b><br />Arrastra para mirar · rueda para acercar</div>
+    <div id="hud">
+      <b>LOW POLY CAMP</b><br />
+      <span class="desktop-only">WASD o flechas para moverte · Shift correr · Espacio saltar · arrastra para mirar</span>
+      <span class="touch-only">Joystick para moverte · arrastra para mirar</span>
+    </div>
+    <div id="joystick"><div id="joystick-knob"></div></div>
+    <button id="jump-btn" type="button">SALTAR</button>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

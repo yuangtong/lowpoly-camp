@@ -35,6 +35,7 @@ export function groundHeight(x, z) {
 /**
  * Crea la malla del terreno y la añade a la escena.
  * @param {THREE.Scene} scene
+ * @returns {THREE.Mesh} Malla del suelo (sirve para apoyar al personaje con un rayo).
  */
 export function createTerrain(scene) {
   const geo = new THREE.PlaneGeometry(WORLD.width, WORLD.depth, 100, 90);
@@ -56,4 +57,5 @@ export function createTerrain(scene) {
   );
   ground.receiveShadow = true;
   scene.add(ground);
+  return ground;
 }
