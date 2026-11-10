@@ -77,7 +77,7 @@ function animate() {
   camp.update(t);
   water.update(t);
   sky.update();
-  party.update(dt, t);
+  party.update(dt, t, player.position);
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

@@ -4,6 +4,7 @@ import { COLORS, PARTY, PLAYER } from '../config.js';
 import { flatMat, paintFaces, varied } from '../utils/geometry.js';
 import { pick, rand, range } from '../utils/rng.js';
 import { addCollider } from './colliders.js';
+import { createGuests } from './guests.js';
 import { groundHeight } from './terrain.js';
 
 const POLES = 6;
@@ -290,11 +291,11 @@ function createConfetti(scene) {
 }
 
 /**
- * Crea la fiesta sorpresa: cartel, banderines, luces, torta, regalos, globos
- * y confeti.
+ * Crea la fiesta sorpresa: cartel, banderines, luces, torta, regalos, globos,
+ * confeti e invitados.
  * @param {THREE.Scene} scene
- * @returns {{ celebrate: () => void, update: (dt: number, t: number) => void }}
- *   `celebrate` suelta el confeti; `update` anima la fiesta.
+ * @returns {{ celebrate: () => void, update: (dt: number, t: number, playerPos: THREE.Vector3) => void }}
+ *   `celebrate` suelta el confeti y anima a los invitados; `update` anima la fiesta.
  */
 export function createParty(scene) {
   createBanner(scene);
@@ -302,6 +303,7 @@ export function createParty(scene) {
   createTableAndGifts(scene);
   const balloons = createBalloons(scene);
   const confetti = createConfetti(scene);
+  const guests = createGuests(scene, (lx, lz) => ({ x: worldX(lx, lz), z: worldZ(lx, lz) }), ANGLE);
 
   // Luz cálida que ilumina el claro
   const light = new THREE.PointLight(COLORS.partyLight, PARTY_LIGHT, 30, 1.6);
@@ -311,8 +313,10 @@ export function createParty(scene) {
   return {
     celebrate() {
       confetti.points.visible = true;
+      guests.celebrate();
     },
-    update(dt, t) {
+    update(dt, t, playerPos) {
+      guests.update(dt, t, playerPos);
       for (const b of balloons) {
         b.rotation.z = Math.sin(t * 0.9 + b.userData.phase) * 0.05;
         b.rotation.x = Math.cos(t * 0.7 + b.userData.phase) * 0.04;

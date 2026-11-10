@@ -133,9 +133,72 @@ export const COLORS = {
   coin: '#ffcf3f',
   coinGlow: '#a86a00',
 
+  // Gatas
+  catNose: '#f4a6b0',
+  catEyes: '#9bbf5a',
+
   // Cielo
   cloudTop: '#f2f5fc',
   cloudBottom: '#b7c4e0',
   cloudEmissive: '#55679a',
   star: '#ffffff',
+};
+
+/**
+ * Invitados de la fiesta. Las posiciones `at` son locales a la fiesta:
+ * [x, z] con +Z apuntando hacia el campamento.
+ */
+export const GUESTS = {
+  cats: [
+    {
+      name: 'Mente',
+      says: '¡Miau!',
+      pose: 'sentada',
+      at: [-1.6, 1.2],
+      turn: 0.5,
+      coat: { pattern: 'bicolor', main: '#9aa0ad', white: '#f7f4ef', tail: '#9aa0ad' },
+      collar: '#d6456b',
+      tag: '#58c98a',
+    },
+    {
+      name: 'Lola',
+      says: '¡Miau, miau!',
+      pose: 'echada',
+      at: [-3.6, 2.1],
+      turn: 0.9,
+      coat: { pattern: 'calico', white: '#f7f4ef', orange: '#e2933f', black: '#3d3633', tail: '#3d3633' },
+      collar: '#d6456b',
+      tag: '#b98be0',
+    },
+  ],
+  footballers: [
+    {
+      name: 'Cristiano',
+      says: '¡SIUUU!',
+      at: [4.3, 0.4],
+      scale: 1.06,
+      hopSpeed: 3.2,
+      hopHeight: 0.7,
+      look: {
+        skin: '#e0ac7e', top: '#c8102e', sleeves: '#c8102e', shortSleeves: true,
+        legsUpper: '#0b6b3a', legsLower: '#c8102e', boots: '#f4f1ec',
+        headwear: 'hair', headColor: '#1c1512',
+      },
+    },
+    {
+      name: 'Messi',
+      says: '¡Feliz cumple, Xian!',
+      at: [6.0, 1.3],
+      scale: 0.94,
+      hopSpeed: 4.1,
+      hopHeight: 0.25,
+      look: {
+        skin: '#eebf96', top: ['#75aadb', '#ffffff', '#75aadb', '#ffffff', '#75aadb'],
+        sleeves: '#75aadb', shortSleeves: true,
+        legsUpper: '#1b2340', legsLower: '#ffffff', boots: '#1b2340',
+        headwear: 'hair', headColor: '#5a3a22', beard: '#6b4429',
+      },
+    },
+  ],
+  ball: [5.1, 1.9],
 };

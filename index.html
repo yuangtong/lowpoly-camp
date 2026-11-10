@@ -43,6 +43,8 @@
         text-shadow: 0 4px 0 #f08a3c, 0 8px 24px #000a; opacity: 0; transform: scale(.6);
       }
       #celebration.show { animation: pop .7s cubic-bezier(.2, 1.6, .4, 1) forwards, sway 2.4s ease-in-out .7s infinite; }
+      #celebration.show.done { animation: fade 1.2s ease forwards; }
+      @keyframes fade { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(1.15); } }
       @keyframes pop { to { opacity: 1; transform: scale(1); } }
       @keyframes sway {
         0%, 100% { opacity: 1; transform: scale(1) rotate(-1.5deg); }
@@ -50,6 +52,7 @@
       }
       @media (prefers-reduced-motion: reduce) {
         #celebration.show { animation: none; opacity: 1; transform: none; }
+        #celebration.show.done { opacity: 0; }
       }
 
       /* Controles táctiles: solo en pantallas táctiles */

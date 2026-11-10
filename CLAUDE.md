@@ -30,7 +30,9 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 - Juego: es una sorpresa de cumpleaños para Xian (hermano del autor). Un camino de monedas
   lleva del campamento a una fiesta escondida (`PARTY` en config); al entrar al claro se
   muestra «¡Feliz cumpleaños, Xian!», confeti y la canción. Mochila con monedas y madera
-  (golpear árboles con E / botón GOLPEAR). La idea a futuro es "encontrar cosas", no
+  (golpear árboles con E / botón GOLPEAR). Invitados en la fiesta (`GUESTS` en config,
+  `src/world/guests.js`): las gatas Mente (gris y blanca) y Lola (tricolor), y dos
+  futbolistas de bloques (Cristiano y Messi) hechos con `createCharacter(look)`. La idea a futuro es "encontrar cosas", no
   craftear: inspirado en Minecraft pero sin construcción.
 - HUD en `index.html` (objetivo, mochila, avisos); sonidos generados con WebAudio.
 - `?spawn=x,z` en la URL coloca al personaje en ese punto (para pruebas).

@@ -34,6 +34,8 @@ export function createHud() {
     celebrate(text) {
       celebration.textContent = text;
       celebration.classList.add('show');
+      // A los pocos segundos se retira para dejar ver la fiesta
+      setTimeout(() => celebration.classList.add('done'), 7000);
     },
   };
 }
