@@ -61,6 +61,19 @@ export const LOOT = {
   hitCooldown: 0.45,
 };
 
+/** Cielo nocturno. */
+export const SKY = {
+  /** Degradado de la cúpula: horizonte → media altura → cenit. */
+  horizon: '#1a3570',
+  middle: '#14296a',
+  zenith: '#060d2a',
+  /** Estrellas extra repartidas por toda la cúpula. */
+  extraStars: 520,
+  fireflies: 90,
+  /** Segundos (mínimo y máximo) entre estrellas fugaces. */
+  shootingStarEvery: [5, 12],
+};
+
 /** Cámara en tercera persona. */
 export const CAMERA = {
   /** Altura del punto que mira la cámara sobre los pies del personaje. */
@@ -138,11 +151,25 @@ export const COLORS = {
   catEyes: '#9bbf5a',
 
   // Cielo
+  moonDisc: '#f3f0dc',
+  moonHalo: '#a9c2ff',
+  firefly: '#e8ff8a',
   cloudTop: '#f2f5fc',
   cloudBottom: '#b7c4e0',
   cloudEmissive: '#55679a',
   star: '#ffffff',
 };
+
+/**
+ * Objetos especiales que hay que encontrar. `at` es [x, z] en el mundo.
+ */
+export const ITEMS = {
+  fish: { name: 'Pescado', at: [4, 19], color: '#8fc7e8' },
+  yarn: { name: 'Ovillo de lana', at: [34, -16], color: '#d6456b' },
+};
+
+/** Arco de fútbol, en coordenadas locales de la fiesta. */
+export const GOAL = { x: 11, z: 3.2, halfWidth: 1.7, depth: 1.3, height: 1.9 };
 
 /**
  * Invitados de la fiesta. Las posiciones `at` son locales a la fiesta:
@@ -159,6 +186,11 @@ export const GUESTS = {
       coat: { pattern: 'bicolor', main: '#9aa0ad', white: '#f7f4ef', tail: '#9aa0ad' },
       collar: '#d6456b',
       tag: '#58c98a',
+      /** Qué hay que traerle para que te siga (clave de ITEMS). */
+      wants: 'yarn',
+      asks: ['Miau… perdí mi ovillo de lana.', 'Creo que rodó hacia el bosque del este.'],
+      thanks: '¡Mi ovillo! ¡Prrr! Voy contigo.',
+      purrs: ['¡Prrr!', 'Miau ♥'],
     },
     {
       name: 'Lola',
@@ -169,8 +201,15 @@ export const GUESTS = {
       coat: { pattern: 'calico', white: '#f7f4ef', orange: '#e2933f', black: '#3d3633', tail: '#3d3633' },
       collar: '#d6456b',
       tag: '#b98be0',
+      wants: 'fish',
+      asks: ['Miau… tengo hambre.', '¿Me traes un pescado? Hay uno a la orilla del río.'],
+      thanks: '¡Pescado! ¡Prrr! Te sigo a donde vayas.',
+      purrs: ['¡Prrr, prrr!', 'Miau ♥'],
     },
   ],
+  /**
+   * Cada frase puede llevar `reply`: lo que contesta el otro futbolista.
+   */
   footballers: [
     {
       name: 'Cristiano',
@@ -179,6 +218,14 @@ export const GUESTS = {
       scale: 1.06,
       hopSpeed: 3.2,
       hopHeight: 0.7,
+      lines: [
+        { text: '¡Feliz cumple, Xian! ¡SIUUUU!' },
+        { text: '¡Yo estoy aquí!', reply: 'Sí, sí… ya te vimos.' },
+        { text: 'Nada de gaseosa: ¡agua!' },
+        { text: 'Tengo 5 Champions.', reply: 'Y yo 8 Balones de Oro.' },
+        { text: 'Tu amor me hace fuerte; tu odio, imparable.' },
+        { text: '¿Jugamos? Empuja la pelota hasta el arco.' },
+      ],
       look: {
         skin: '#e0ac7e', top: '#c8102e', sleeves: '#c8102e', shortSleeves: true,
         legsUpper: '#0b6b3a', legsLower: '#c8102e', boots: '#f4f1ec',
@@ -192,6 +239,14 @@ export const GUESTS = {
       scale: 0.94,
       hopSpeed: 4.1,
       hopHeight: 0.25,
+      lines: [
+        { text: '¡Feliz cumple, Xian! Hoy invita la casa.' },
+        { text: '¿Qué mirás, bobo? …Es broma, ¡pasá!' },
+        { text: 'Ya soy campeón del mundo. Ahora, la torta.', reply: '¡Calma, calma! Primero las velas.' },
+        { text: 'Andá p\'allá… que allá está la torta.' },
+        { text: '¡Vamos, vamos, que hoy se festeja!' },
+        { text: 'Si metés un gol, lo grito yo.' },
+      ],
       look: {
         skin: '#eebf96', top: ['#75aadb', '#ffffff', '#75aadb', '#ffffff', '#75aadb'],
         sleeves: '#75aadb', shortSleeves: true,

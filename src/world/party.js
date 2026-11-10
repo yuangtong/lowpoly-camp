@@ -4,6 +4,8 @@ import { COLORS, PARTY, PLAYER } from '../config.js';
 import { flatMat, paintFaces, varied } from '../utils/geometry.js';
 import { pick, rand, range } from '../utils/rng.js';
 import { addCollider } from './colliders.js';
+import { createFireworks } from './fireworks.js';
+import { createFootball } from './football.js';
 import { createGuests } from './guests.js';
 import { groundHeight } from './terrain.js';
 
@@ -22,6 +24,14 @@ const COS = Math.cos(ANGLE), SIN = Math.sin(ANGLE);
 /** Convierte coordenadas locales de la fiesta a (x, z) del mundo. */
 const worldX = (lx, lz) => PARTY.x + lx * COS + lz * SIN;
 const worldZ = (lx, lz) => PARTY.z - lx * SIN + lz * COS;
+const toWorld = (lx, lz) => ({ x: worldX(lx, lz), z: worldZ(lx, lz) });
+
+/** Convierte (x, z) del mundo a coordenadas locales de la fiesta; escribe en `out`. */
+function toLocal(x, z, out) {
+  const dx = x - PARTY.x, dz = z - PARTY.z;
+  out.x = dx * COS - dz * SIN;
+  out.z = dx * SIN + dz * COS;
+}
 
 /** Caja de un color, centrada en (x, y, z). */
 function box(w, h, d, color, x = 0, y = 0, z = 0) {
@@ -294,8 +304,9 @@ function createConfetti(scene) {
  * Crea la fiesta sorpresa: cartel, banderines, luces, torta, regalos, globos,
  * confeti e invitados.
  * @param {THREE.Scene} scene
- * @returns {{ celebrate: () => void, update: (dt: number, t: number, playerPos: THREE.Vector3) => void }}
- *   `celebrate` suelta el confeti y anima a los invitados; `update` anima la fiesta.
+ * @returns {{ guests: object, football: object, onGoal: (() => void) | null, celebrate: () => void, update: (dt: number, t: number, player: { position: THREE.Vector3, velocity: THREE.Vector3 }) => void }}
+ *   `celebrate` suelta confeti y fuegos artificiales y anima a los invitados;
+ *   `update` anima la fiesta; `guests` da acceso a gatas y futbolistas.
  */
 export function createParty(scene) {
   createBanner(scene);
@@ -303,20 +314,32 @@ export function createParty(scene) {
   createTableAndGifts(scene);
   const balloons = createBalloons(scene);
   const confetti = createConfetti(scene);
-  const guests = createGuests(scene, (lx, lz) => ({ x: worldX(lx, lz), z: worldZ(lx, lz) }), ANGLE);
+  const guests = createGuests(scene, toWorld, ANGLE);
+  const football = createFootball(scene, toWorld, toLocal, ANGLE);
+  const fireworks = createFireworks(scene);
 
   // Luz cálida que ilumina el claro
   const light = new THREE.PointLight(COLORS.partyLight, PARTY_LIGHT, 30, 1.6);
   light.position.set(PARTY.x, groundHeight(PARTY.x, PARTY.z) + 4.5, PARTY.z);
   scene.add(light);
 
-  return {
+  const party = {
+    guests,
+    football,
+    /** Se llama cuando la pelota entra al arco; lo asigna el juego. */
+    onGoal: null,
     celebrate() {
       confetti.points.visible = true;
       guests.celebrate();
+      fireworks.start();
     },
-    update(dt, t, playerPos) {
-      guests.update(dt, t, playerPos);
+    update(dt, t, player) {
+      guests.update(dt, t, player.position);
+      if (football.update(dt, player)) {
+        for (const f of guests.footballers) f.cheer();
+        if (party.onGoal) party.onGoal();
+      }
+      fireworks.update(dt);
       for (const b of balloons) {
         b.rotation.z = Math.sin(t * 0.9 + b.userData.phase) * 0.05;
         b.rotation.x = Math.cos(t * 0.7 + b.userData.phase) * 0.04;
@@ -326,4 +349,5 @@ export function createParty(scene) {
       if (confetti.points.visible) confetti.update(dt);
     },
   };
+  return party;
 }

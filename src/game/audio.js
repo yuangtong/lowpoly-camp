@@ -50,6 +50,25 @@ export function playHit() {
   note(90, 0.03, 0.16, 'triangle', 0.12);
 }
 
+/** Maullido corto: una nota que sube y baja. */
+export function playMeow() {
+  const ac = audio();
+  if (!ac) return;
+  const t0 = ac.currentTime;
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(520, t0);
+  osc.frequency.linearRampToValueAtTime(860, t0 + 0.12);
+  osc.frequency.linearRampToValueAtTime(600, t0 + 0.38);
+  gain.gain.setValueAtTime(0, t0);
+  gain.gain.linearRampToValueAtTime(0.1, t0 + 0.04);
+  gain.gain.exponentialRampToValueAtTime(0.001, t0 + 0.42);
+  osc.connect(gain).connect(ac.destination);
+  osc.start(t0);
+  osc.stop(t0 + 0.45);
+}
+
 // "Cumpleaños feliz": [frecuencia, duración en tiempos]
 const G4 = 392, A4 = 440, B4 = 493.88, C5 = 523.25, D5 = 587.33, E5 = 659.25, F5 = 698.46, G5 = 783.99;
 const BIRTHDAY = [
