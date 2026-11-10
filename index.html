@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Low Poly Camp · Three.js</title>
+    <style>
+      html, body { margin: 0; height: 100%; background: #10234a; overflow: hidden; }
+      canvas { display: block; }
+      #hud {
+        position: fixed; left: 20px; bottom: 18px; color: #dfe8ff;
+        font: 500 13px/1.4 system-ui, -apple-system, Segoe UI, sans-serif;
+        opacity: .75; pointer-events: none; text-shadow: 0 1px 4px #0008;
+      }
+      #hud b { font-size: 15px; letter-spacing: .04em; }
+    </style>
+  </head>
+  <body>
+    <div id="hud"><b>LOW POLY CAMP</b><br />Arrastra para mirar · rueda para acercar</div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
