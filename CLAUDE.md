@@ -83,4 +83,6 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 
 - Comentarios y textos de UI en español.
 - Mantener el look low-poly en todo lo nuevo (flat shading y paleta).
+- Flujo de trabajo: tras cada cambio, subir la rama y abrir un pull request hacia `main`
+  para probarlo en la vista previa de Vercel antes de fusionar.
 - Rendimiento primero: reutiliza geometrías y materiales; no crees objetos dentro del loop de animación.
