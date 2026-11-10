@@ -20,9 +20,10 @@ function walkable(x, z) {
  * Crea el personaje controlable.
  * @param {THREE.Scene} scene
  * @param {THREE.Mesh} terrain Malla del suelo, para apoyar los pies con un rayo.
- * @returns {{ position: THREE.Vector3, update: (dt: number, t: number, input: { x: number, y: number, run: boolean, jump: boolean }, camera: THREE.Camera) => void }}
+ * @param {{ x: number, z: number }} [start] Posición inicial.
+ * @returns {{ position: THREE.Vector3, punch: () => void, update: (dt: number, t: number, input: { x: number, y: number, run: boolean, jump: boolean }, camera: THREE.Camera) => void }}
  */
-export function createPlayer(scene, terrain) {
+export function createPlayer(scene, terrain, start = PLAYER.start) {
   const { group, animate } = createCharacter();
   scene.add(group);
 
@@ -38,6 +39,7 @@ export function createPlayer(scene, terrain) {
   let facing = PLAYER.start.facing;
   let walkPhase = 0;
   let grounded = true;
+  let punchTime = 0; // 1 → 0 mientras dura el golpe
 
   /** Altura real del suelo bajo (x, z), medida sobre la malla facetada. */
   function floorY(x, z) {
@@ -48,7 +50,7 @@ export function createPlayer(scene, terrain) {
     return hits.length ? hits[0].point.y : groundHeight(x, z);
   }
 
-  pos.set(PLAYER.start.x, floorY(PLAYER.start.x, PLAYER.start.z), PLAYER.start.z);
+  pos.set(start.x, floorY(start.x, start.z), start.z);
   group.rotation.y = facing;
 
   function update(dt, t, input, camera) {
@@ -106,8 +108,14 @@ export function createPlayer(scene, terrain) {
     }
 
     walkPhase += planar * dt * 1.9;
-    animate(walkPhase, Math.min(1, planar / PLAYER.runSpeed), !grounded, t);
+    if (punchTime > 0) punchTime = Math.max(0, punchTime - dt * 3.2);
+    animate(walkPhase, Math.min(1, planar / PLAYER.runSpeed), !grounded, t, punchTime);
   }
 
-  return { position: pos, update };
+  /** Lanza la animación de golpe. */
+  function punch() {
+    punchTime = 1;
+  }
+
+  return { position: pos, punch, update };
 }

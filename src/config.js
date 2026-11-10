@@ -34,6 +34,33 @@ export const PLAYER = {
   bounds: { minX: -118, maxX: 118, minZ: -62, maxZ: 40 },
 };
 
+/** Fiesta sorpresa escondida en el bosque. */
+export const PARTY = {
+  /** A quién se le celebra (aparece en el cartel y en el mensaje). */
+  name: 'Xian',
+  /** Centro del claro de la fiesta (x, z). */
+  x: -60,
+  z: -34,
+  /** Radio de la zona decorada. */
+  radius: 10,
+  /** Radio sin árboles (más amplio, para que no tapen la cámara al llegar). */
+  clearRadius: 17,
+  /** Distancia a la que se activa la celebración. */
+  triggerRadius: 9,
+};
+
+/** Objetos que se encuentran por el mundo. */
+export const LOOT = {
+  /** Monedas del camino entre el campamento y la fiesta. */
+  trailCoins: 20,
+  /** Monedas sueltas repartidas por el mapa. */
+  scatteredCoins: 24,
+  pickupRadius: 1.2,
+  /** Madera que suelta cada árbol al golpearlo. */
+  woodPerTree: 3,
+  hitCooldown: 0.45,
+};
+
 /** Cámara en tercera persona. */
 export const CAMERA = {
   /** Altura del punto que mira la cámara sobre los pies del personaje. */
@@ -93,6 +120,18 @@ export const COLORS = {
   beanie: '#c8443a',
   backpack: '#3f9a3a',
   eyes: '#1b2340',
+
+  // Fiesta
+  festive: ['#ff5d73', '#ffd23f', '#3fd0c9', '#7b6cff', '#f08a3c', '#6fdc6f'],
+  bannerCloth: '#fff4dc',
+  bannerText: '#16306a',
+  cakeBase: '#ff8fb1',
+  cakeTop: '#fff4dc',
+  tablecloth: '#e3ecfa',
+  partyLight: '#ffd9a0',
+  bulb: '#ffe9a8',
+  coin: '#ffcf3f',
+  coinGlow: '#a86a00',
 
   // Cielo
   cloudTop: '#f2f5fc',

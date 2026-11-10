@@ -1,5 +1,5 @@
-// Entrada del jugador: teclado (WASD / flechas, Shift, Espacio) y controles
-// táctiles (joystick virtual + botón de salto definidos en index.html).
+// Entrada del jugador: teclado (WASD / flechas, Shift, Espacio, E) y controles
+// táctiles (joystick virtual + botones definidos en index.html).
 
 const KEYS = {
   KeyW: 'up', ArrowUp: 'up',
@@ -8,24 +8,28 @@ const KEYS = {
   KeyD: 'right', ArrowRight: 'right',
   ShiftLeft: 'run', ShiftRight: 'run',
   Space: 'jump',
+  KeyE: 'action', KeyF: 'action',
 };
 
 /**
  * Conecta teclado y controles táctiles.
- * @returns {{ x: number, y: number, run: boolean, jump: boolean, update: () => void }}
+ * @returns {{ x: number, y: number, run: boolean, jump: boolean, action: boolean, update: () => void }}
  *   Tras `update()`: `x` (derecha +) e `y` (adelante +) en [-1, 1] con magnitud
- *   máxima 1; `run` y `jump` indican si esas acciones están pulsadas.
+ *   máxima 1; `run`, `jump` y `action` (golpear) indican si están pulsadas.
  */
 export function createInput() {
-  const held = { up: false, down: false, left: false, right: false, run: false, jump: false };
+  const held = { up: false, down: false, left: false, right: false, run: false, jump: false, action: false };
   const stick = { x: 0, y: 0, active: false };
-  const state = { x: 0, y: 0, run: false, jump: false, update };
+  // Pulsaciones pendientes: un toque más corto que un frame no se pierde
+  const tapped = { jump: false, action: false };
+  const state = { x: 0, y: 0, run: false, jump: false, action: false, update };
 
   // --- Teclado ---
   window.addEventListener('keydown', (e) => {
     const action = KEYS[e.code];
     if (!action) return;
     held[action] = true;
+    if (action in tapped && !e.repeat) tapped[action] = true;
     e.preventDefault(); // evita que las flechas o el espacio muevan la página
   });
   window.addEventListener('keyup', (e) => {
@@ -73,16 +77,19 @@ export function createInput() {
     base.addEventListener('pointercancel', release);
   }
 
-  // --- Botón de salto táctil ---
-  const jumpBtn = document.getElementById('jump-btn');
-  let touchJump = false;
-  if (jumpBtn) {
-    jumpBtn.addEventListener('pointerdown', (e) => { touchJump = true; e.preventDefault(); });
-    const up = () => { touchJump = false; };
-    jumpBtn.addEventListener('pointerup', up);
-    jumpBtn.addEventListener('pointercancel', up);
-    jumpBtn.addEventListener('pointerleave', up);
-  }
+  // --- Botones táctiles (saltar y golpear) ---
+  const touch = { jump: false, action: false };
+  const bindButton = (id, name) => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    const up = () => { touch[name] = false; };
+    btn.addEventListener('pointerdown', (e) => { touch[name] = true; tapped[name] = true; e.preventDefault(); });
+    btn.addEventListener('pointerup', up);
+    btn.addEventListener('pointercancel', up);
+    btn.addEventListener('pointerleave', up);
+  };
+  bindButton('jump-btn', 'jump');
+  bindButton('action-btn', 'action');
 
   function update() {
     if (stick.active) {
@@ -98,7 +105,9 @@ export function createInput() {
       state.y = y;
       state.run = held.run;
     }
-    state.jump = held.jump || touchJump;
+    state.jump = held.jump || touch.jump || tapped.jump;
+    state.action = held.action || touch.action || tapped.action;
+    tapped.jump = tapped.action = false;
   }
 
   return state;

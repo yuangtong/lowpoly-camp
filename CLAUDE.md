@@ -9,8 +9,9 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 - Stack: Vite + Three.js (ES modules, JavaScript). Sin modelos externos por ahora: todo es procedural.
 - Archivos: `index.html` (canvas + HUD), `src/main.js` (setup + loop), `src/config.js`
   (semilla, medidas, jugador, cámara y paleta), `src/utils/` (rng, noise, geometry),
-  `src/world/` (terrain, water, mountains, trees, rocks, camp, sky, colliders) y
-  `src/player/` (character, player, input, camera). Cada módulo de `world`
+  `src/world/` (terrain, water, mountains, trees, rocks, camp, sky, party, colliders),
+  `src/player/` (character, player, input, camera) y `src/game/` (game, collectibles,
+  hud, audio). Cada módulo de `world`
   exporta `create…(scene)`; los animados devuelven `{ update }`.
 - El RNG con semilla es compartido: el orden en que `main.js` construye los módulos
   define la escena. Añade lo nuevo al final de esa lista.
@@ -26,6 +27,13 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 - Colisiones: círculos en XZ registrados con `addCollider()` desde cada módulo del mundo;
   el río y los límites del mapa se bloquean en `player.js`. Todo obstáculo nuevo debe
   registrar su collider.
+- Juego: es una sorpresa de cumpleaños para Xian (hermano del autor). Un camino de monedas
+  lleva del campamento a una fiesta escondida (`PARTY` en config); al entrar al claro se
+  muestra «¡Feliz cumpleaños, Xian!», confeti y la canción. Mochila con monedas y madera
+  (golpear árboles con E / botón GOLPEAR). La idea a futuro es "encontrar cosas", no
+  craftear: inspirado en Minecraft pero sin construcción.
+- HUD en `index.html` (objetivo, mochila, avisos); sonidos generados con WebAudio.
+- `?spawn=x,z` en la URL coloca al personaje en ese punto (para pruebas).
 - Deploy: Vercel (framework Vite, build `vite build`, salida `dist`). Repo en GitHub.
 
 ## Referencias (consúltalas antes de implementar algo nuevo)
@@ -50,7 +58,8 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 
 1. ~~Personaje controlable (WASD) + cámara en tercera persona.~~ Hecho (también táctil).
 2. ~~Colisiones con árboles y rocas, y límites del mapa.~~ Hecho (círculos simples).
-3. Mecánica arcade (recolectar objetos, puntaje, tiempo).
+3. Mecánica arcade: hecho lo básico (monedas, madera, mochila, fiesta sorpresa). Falta
+   dar uso a lo recolectado y, si se quiere, puntaje/tiempo.
 4. Menú, sonido y pantalla de game over.
 5. Multijugador con Colyseus.
 

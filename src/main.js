@@ -1,9 +1,12 @@
 import * as THREE from 'three';
+import { PLAYER } from './config.js';
+import { createGame } from './game/game.js';
 import { createFollowCamera } from './player/camera.js';
 import { createInput } from './player/input.js';
 import { createPlayer } from './player/player.js';
 import { createCamp } from './world/camp.js';
 import { createMountains } from './world/mountains.js';
+import { createParty } from './world/party.js';
 import { createRocks } from './world/rocks.js';
 import { createAtmosphere, createSky } from './world/sky.js';
 import { createTerrain } from './world/terrain.js';
@@ -35,15 +38,27 @@ createAtmosphere(scene);
 const terrain = createTerrain(scene);
 const water = createWater(scene);
 createMountains(scene);
-createTrees(scene);
+const trees = createTrees(scene);
 createRocks(scene);
 const camp = createCamp(scene);
 const sky = createSky(scene);
+const party = createParty(scene);
 
 // Jugador (después del mundo: así no altera la escena generada)
 const input = createInput();
-const player = createPlayer(scene, terrain);
+const player = createPlayer(scene, terrain, spawnPoint());
 const followCamera = createFollowCamera(camera, renderer.domElement, player.position);
+const game = createGame(scene, { player, input, party, trees });
+
+/**
+ * Punto de inicio. Para pruebas se puede pasar en la URL: `?spawn=x,z`.
+ * @returns {{ x: number, z: number }}
+ */
+function spawnPoint() {
+  const raw = new URLSearchParams(location.search).get('spawn');
+  const [x, z] = raw ? raw.split(',').map(Number) : [];
+  return Number.isFinite(x) && Number.isFinite(z) ? { x, z } : PLAYER.start;
+}
 
 // ---------------------------------------------------------------------------
 // Animación
@@ -57,10 +72,12 @@ function animate() {
   input.update();
   player.update(dt, t, input, camera);
   followCamera.update();
+  game.update(dt, t);
 
   camp.update(t);
   water.update(t);
   sky.update();
+  party.update(dt, t);
 
   renderer.render(scene, camera);
   requestAnimationFrame(animate);

@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { COLORS, WORLD } from '../config.js';
+import { COLORS, LOOT, PARTY, WORLD } from '../config.js';
 import { flatMat, jitter, paintFaces, varied } from '../utils/geometry.js';
 import { pick, rand, range } from '../utils/rng.js';
 import { addCollider } from './colliders.js';
@@ -42,8 +42,11 @@ function makePineGeometry(seed) {
  * Crea el bosque disperso y los pinos de primer plano. Las geometrías se
  * comparten entre pinos: solo hay `PINE_VARIANTS` geometrías distintas.
  * @param {THREE.Scene} scene
+ * @returns {{ x: number, z: number, r: number, mesh: THREE.Mesh, wood: number }[]}
+ *   Lista de árboles (para golpearlos y sacarles madera).
  */
 export function createTrees(scene) {
+  const trees = [];
   const variants = Array.from({ length: PINE_VARIANTS }, (_, i) => makePineGeometry(i * 7 + 3));
 
   const pine = (x, z, s = 1) => {
@@ -53,8 +56,13 @@ export function createTrees(scene) {
     m.rotation.y = rand() * Math.PI * 2;
     m.castShadow = true;
     m.receiveShadow = true;
+    // El claro de la fiesta queda libre. Se descarta DESPUÉS de consumir el
+    // RNG para que el resto del bosque no cambie.
+    if (Math.hypot(x - PARTY.x, z - PARTY.z) < PARTY.clearRadius) return;
     scene.add(m);
-    addCollider(x, z, 0.45 * s); // solo el tronco
+    const r = 0.45 * s; // solo el tronco
+    addCollider(x, z, r);
+    trees.push({ x, z, r, mesh: m, wood: LOOT.woodPerTree });
   };
 
   // Bosque disperso
@@ -69,4 +77,5 @@ export function createTrees(scene) {
   }
 
   for (const [x, z, s] of HERO_PINES) pine(x, z, s);
+  return trees;
 }

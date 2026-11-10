@@ -37,9 +37,10 @@ function limb(parts, x, y) {
 /**
  * Crea el personaje low-poly (estilo muñeco de bloques). Mira hacia +Z y sus
  * pies están en y = 0.
- * @returns {{ group: THREE.Group, animate: (walkPhase: number, moving: number, airborne: boolean, t: number) => void }}
+ * @returns {{ group: THREE.Group, animate: (walkPhase: number, moving: number, airborne: boolean, t: number, punch: number) => void }}
  *   `animate`: `walkPhase` avanza con la distancia recorrida, `moving` va de
- *   0 (quieto) a 1 (corriendo), `t` es el tiempo en segundos.
+ *   0 (quieto) a 1 (corriendo), `t` es el tiempo en segundos y `punch` va de
+ *   1 (inicio del golpe) a 0 (sin golpe).
  */
 export function createCharacter() {
   const group = new THREE.Group();
@@ -76,7 +77,7 @@ export function createCharacter() {
   const legL = leg(-0.18), legR = leg(0.18);
   group.add(armL, armR, legL, legR);
 
-  function animate(walkPhase, moving, airborne, t) {
+  function animate(walkPhase, moving, airborne, t, punch) {
     if (airborne) {
       // En el aire: brazos arriba y piernas recogidas
       armL.rotation.x = armR.rotation.x = -2.4;
@@ -92,6 +93,8 @@ export function createCharacter() {
     armR.rotation.x = swing * 0.9;
     // Rebote al caminar + respiración en reposo
     body.position.y = Math.abs(Math.cos(walkPhase)) * 0.06 * moving + Math.sin(t * 2) * 0.012;
+    // Golpe: el brazo derecho sube y baja de un tirón
+    if (punch > 0) armR.rotation.x = -2.6 * Math.sin(punch * Math.PI);
   }
 
   return { group, animate };
