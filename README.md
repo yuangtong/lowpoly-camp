@@ -16,16 +16,34 @@ npm run build    # genera dist/ para producción
 |---|---|
 | `flatShading: true` + color por cara (`paintFaces`) | todas las mallas |
 | Geometrías con pocos segmentos + `jitter()` determinista | montañas, pinos, rocas, nubes |
-| Nieve según la altura de cada cara | `mountain()` |
+| Nieve según la altura de cada cara | `src/world/mountains.js` |
 | `PointLight` cálida que parpadea + halo aditivo | fogata |
 | Niebla azul + luz hemisférica + luna direccional | ambiente |
 
 ## Estructura
 
 ```
-index.html      → canvas + HUD
-src/main.js     → escena completa (terreno, río, montañas, bosque, campamento, cielo)
+index.html            → canvas + HUD
+src/main.js           → renderer, cámara, controles y loop de animación
+src/config.js         → semilla, medidas del mundo y paleta de colores
+src/utils/
+  rng.js              → RNG con semilla (mulberry32, rand, range, pick)
+  noise.js            → hash3: ruido determinista por posición
+  geometry.js         → jitter, paintFaces, varied, material y textura compartidos
+src/world/
+  terrain.js          → terreno, groundHeight() y cauce del río
+  water.js            → río con olas
+  mountains.js        → montañas nevadas
+  trees.js            → pinos (bosque + primer plano)
+  rocks.js            → rocas
+  camp.js             → carpa, fogata y asientos
+  sky.js              → niebla, luces, nubes y estrellas
+CLAUDE.md             → contexto del proyecto, referencias y roadmap
 ```
+
+Cada módulo de `src/world/` exporta una función `create…(scene)`; los que se animan devuelven `{ update }`, que `main.js` llama en cada frame.
+
+> Todos los módulos comparten un RNG con semilla, así que el **orden** en que `main.js` los construye define la escena. Añade lo nuevo al final para no alterar lo que ya existe.
 
 ## Próximos pasos para convertirlo en juego
 

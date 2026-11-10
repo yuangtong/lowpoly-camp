@@ -7,7 +7,12 @@ Juego arcade 3D low-poly que corre en el navegador. Hoy es solo una escena
 ## Proyecto
 
 - Stack: Vite + Three.js (ES modules, JavaScript). Sin modelos externos por ahora: todo es procedural.
-- Archivos: `index.html` (canvas + HUD) y `src/main.js` (escena completa).
+- Archivos: `index.html` (canvas + HUD), `src/main.js` (setup + loop), `src/config.js`
+  (semilla, medidas y paleta), `src/utils/` (rng, noise, geometry) y `src/world/`
+  (terrain, water, mountains, trees, rocks, camp, sky). Cada módulo de `world`
+  exporta `create…(scene)`; los animados devuelven `{ update }`.
+- El RNG con semilla es compartido: el orden en que `main.js` construye los módulos
+  define la escena. Añade lo nuevo al final de esa lista.
 - Estilo visual low-poly: `flatShading: true`, un color por cara (función `paintFaces`),
   geometrías de pocos segmentos deformadas con `jitter()` (ruido determinista `hash3`),
   RNG con semilla (`mulberry32`), niebla azul, luz hemisférica, luna direccional y
